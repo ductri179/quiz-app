@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./quiz.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <title>Quiz Game</title>
+  </head>
+  <body id="body">
+    <div class="container">
+      <div class="header clearfix cn">
+        <div>Chính xác: <span id="correct">0</span></div>
+        <div>Còn lại: <span id="remain">0</span></div>
+        <div>Chọn sai: <span id="wrong">0</span></div>
+        <button class="button" onclick="refresh()">Tải lại</button>
+      </div>
+      <div id="content" class="clearfix">
+        <input type="file" accept=".csv" onchange="openFile(event)" />
+      </div>
+    </div>
+  </body>
+</html>
