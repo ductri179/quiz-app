@@ -18,46 +18,13 @@ function shuffle(array) {
   return array;
 }
 
-const fitText = (outputDiv) => {
-  // max font size in pixels
-  const maxFontSize = 50;
-  // get element's width
-  let width = outputDiv.clientWidth;
-  // get content's width
-  let contentWidth = outputDiv.scrollWidth;
-  // get fontSize
-  let fontSize = parseInt(
-    window.getComputedStyle(outputDiv, null).getPropertyValue("font-size"),
-    10
-  );
-  // if content's width is bigger then elements width - overflow
-  if (contentWidth > width) {
-    fontSize = Math.ceil((fontSize * width) / contentWidth, 10);
-    fontSize = fontSize > maxFontSize ? (fontSize = maxFontSize) : fontSize - 1;
-    outputDiv.style.fontSize = fontSize + "px";
-  } else {
-    // content is smaller then width... let's resize in 1 px until it fits
-    while (contentWidth === width && fontSize < maxFontSize) {
-      fontSize = Math.ceil(fontSize) + 1;
-      fontSize = fontSize > maxFontSize ? (fontSize = maxFontSize) : fontSize;
-      outputDiv.style.fontSize = fontSize + "px";
-      // update widths
-      width = outputDiv.clientWidth;
-      contentWidth = outputDiv.scrollWidth;
-      if (contentWidth > width) {
-        outputDiv.style.fontSize = fontSize - 1 + "px";
-      }
-    }
-  }
-};
-
-let textFile = "";
+let csvFile = "";
 const openFile = function (event) {
   const input = event.target;
 
   const reader = new FileReader();
   reader.onload = function () {
-    textFile = reader.result;
+    csvFile = reader.result;
     setUp();
   };
   reader.readAsText(input.files[0]);
@@ -72,17 +39,15 @@ const extractData = (rawData) => {
   let data = [];
 
   for (let i = 0; i < rawData.length; i++) {
-    if (rawData[i].includes(",")) {
-      data.push({
-        pair: i,
-        value: rawData[i].split(",")[0],
-      });
+    data.push({
+      pair: i,
+      value: rawData[i][0],
+    });
 
-      data.push({
-        pair: i,
-        value: rawData[i].split(",")[1],
-      });
-    }
+    data.push({
+      pair: i,
+      value: rawData[i][1],
+    });
   }
   return shuffle(data);
 };
@@ -138,7 +103,7 @@ const congrats = () => {
 
   setTimeout(() => {
     document.getElementById("body").removeChild(congratDiv);
-  }, 3000);
+  }, 5000);
 };
 
 const animationEnd = (div) => {
@@ -152,7 +117,7 @@ const setStatistics = () => {
 };
 
 const getRawData = () => {
-  rawData = textFile.split("\n");
+  rawData = $.csv.toArrays(csvFile);
 };
 
 const setUp = () => {
@@ -175,7 +140,6 @@ const setUp = () => {
     tileDiv.setAttribute("pair", data[i].pair);
     tileDiv.onclick = () => tileClick(tileDiv);
     tileDiv.innerHTML = `<span class="tile-content">${data[i].value}</span>`;
-    fitText(tileDiv);
     document.getElementById("content").appendChild(tileDiv);
   }
 };
